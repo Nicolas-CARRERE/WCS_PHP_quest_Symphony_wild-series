@@ -3,14 +3,14 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Season;
+use App\Entity\Episode;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 //Tout d'abord nous ajoutons la classe Factory de FakerPhp
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class SeasonFixtures extends Fixture implements DependentFixtureInterface
+class EpisodeFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -22,17 +22,15 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         * de te générer toutes les données que tu souhaites
         */
 
-        for($i = 0; $i < 50; $i++) {
-            $season = new Season();
-            //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
-            $season->setNumber($faker->numberBetween(1, 10));
-            $season->setYear($faker->year());
-            $season->setDescription($faker->paragraphs(3, true));
-
-            $season->setProgram($this->getReference('program_' . $faker->numberBetween(0, 4)));
-            $this->addReference('season_' . $i, $season);
-
-            $manager->persist($season);
+        for($i = 0; $i < 10; $i++) {
+            $episode = new Episode();
+            //Ce Faker va nous permettre d'alimenter l'instance de Episode que l'on souhaite ajouter en base
+            $episode->setTitle($faker->sentence(3, true));
+            $episode->setNumber($i +1);
+            $episode->setSynopsis($faker->paragraphs(3, true));
+            $episode->setSeason($this->getReference('season_' . $faker->numberBetween(0, 4)));
+            
+            $manager->persist($episode);
         }
 
         $manager->flush();
